@@ -21,8 +21,9 @@ provider:
   # commit your .env.
   #
   environment:
-   SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
-   tableName: notes
+    SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
+    tableName: notes
+    stripeSecretKey: ${env:STRIPE_SECRET_KEY}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -70,4 +71,11 @@ functions:
       - http:
           path: notes/{id}
           method: delete
+          authorizer: aws_iam
+  billing:
+    handler: billing.main
+    events:
+      - http:
+          path: billing
+          method: post
           authorizer: aws_iam
